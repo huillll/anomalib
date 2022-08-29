@@ -26,6 +26,9 @@ jobs:
           export CUDA_VISIBLE_DEVICES=3
           tox -e pre_merge
       - name: Upload coverage report
+        with:
+          env:
+            CODACY_API_KEY: ${{ secrets.CODACY }}
         run: |
           # If the workflow is triggered from PR then it gets the commit id from the PR.
           # else it uses the commit id of the latest commit. This is because the commit
@@ -37,4 +40,4 @@ jobs:
             COMMIT_ID=${{ github.sha }}
           fi
           pip install codacy-coverage
-          python-codacy-coverage -r .tox/coverage.xml -t ${{ secrets.CODACY }} -c $COMMIT_ID
+          python-codacy-coverage -r .tox/coverage.xml -t "$CODACY_API_KEY" -c $COMMIT_ID
